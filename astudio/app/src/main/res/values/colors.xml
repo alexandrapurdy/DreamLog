@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="pink">#FFDE89BE</color>
+    <color name="delft_blue">#FF3A405A</color>
+    <color name="powder_blue">#FF95B8D1</color>
+    <color name="lighter_blue">#CFE5F4</color>
+    <color name="byzantine">#FF702963</color>
+    <color name="dark_teal">#FF104F55</color>
+    <color name="soft_blossom">#FFD7A6B3</color>
+    <color name="pacific_blue">#FF64A6BD</color>
+    <color name="pine_teal">#FF054D48</color>
+    <color name="vintage_berry">#FFA13D63</color>
+    <color name="midnight_violet">#FF351E29</color>
+    <color name="old_rose">#FFC68093</color>
+    <color name="rosewood">#FFA94C65</color>
+    <color name="petal_rogue">#FFC86983</color>
+    <color name="dusty_lavender">#FF89587A</color>
+</resources>

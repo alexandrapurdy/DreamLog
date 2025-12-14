@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/mobile"
+            android:layout_width="match_parent"
+            android:layout_height="205dp"
+            android:layout_marginBottom="437dp"
+            android:contentDescription="@string/mobile"
+            android:paddingBottom="15dp"
+            android:src="@drawable/mobile"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mobile">
+
+
+            <ImageView
+                android:id="@+id/border"
+                android:layout_width="match_parent"
+                android:layout_height="73dp"
+                android:contentDescription="@string/mobile"
+                android:paddingBottom="15dp"
+                android:src="@drawable/border" />
+
+            <View
+                android:id="@+id/dividerTop"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginVertical="16dp"
+                android:layout_marginBottom="17dp"
+                android:background="@color/pink" />
+
+            <TextView
+                android:id="@+id/sharedOwner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:textColor="#702963"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/sharedTimestamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:textColor="#546E7A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:text="@string/dream_details"
+                android:textColor="#3A405A"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dreamTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="4dp"
+                android:textAlignment="center"
+                android:textColor="#3A405A"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dreamSummary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:textAlignment="center"
+                android:textColor="#3A405A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/theme"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textColor="#3A405A"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dreamThemes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="#3A405A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/characters"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textColor="#3A405A"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dreamCharacters"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:textAlignment="center"
+                android:textColor="#3A405A" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/location"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textColor="#3A405A"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/dreamLocations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:textAlignment="center"
+                android:textColor="#3A405A" />
+
+            <View
+                android:id="@+id/dividerBottom"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginVertical="16dp"
+                android:layout_marginBottom="17dp"
+                android:background="@color/pink" />
+
+            <Button
+                android:id="@+id/unshareButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:backgroundTint="@color/byzantine"
+                android:textStyle="bold"
+                android:fontFamily="casual"
+                android:text="@string/unshare_dream" />
+
+            <Button
+                android:id="@+id/backToSharedListButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:fontFamily="casual"
+                android:backgroundTint="@color/dusty_lavender"
+                android:text="@string/back_to_shared_list" />
+
+            <TextView
+                android:id="@+id/bottom_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingTop="20dp"
+                android:fontFamily="casual"
+                android:text="@string/bottom_message"
+                android:textAlignment="center"
+                android:textColor="#702963"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
