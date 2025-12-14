@@ -4,17 +4,12 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.initializeAndSignOut;
+import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.waitForView;
 
-import android.view.View;
-
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.firebase.FirebaseApp;
-import com.google.firebase.auth.FirebaseAuth;
-
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,19 +17,12 @@ import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.dreamlog.controller.ControllerActivity;
 
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.util.TreeIterables;
-
 @RunWith(AndroidJUnit4.class)
 public class AuthSystemTest {
 
-    private static final long UI_TIMEOUT_MS = 10_000;
-
     @Before
     public void setUp() {
-        FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext());
-        FirebaseAuth.getInstance().signOut();
+        initializeAndSignOut();
     }
 
     @Rule
@@ -89,33 +77,6 @@ public class AuthSystemTest {
                 .check(matches(withText(org.hamcrest.Matchers.containsString("Signed in as"))));
     }
 
-    private void waitForView(int viewId) {
-        onView(isRoot()).perform(new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for view id " + viewId;
-            }
-
-            @Override
-            public void perform(UiController uiController, View rootView) {
-                long end = System.currentTimeMillis() + UI_TIMEOUT_MS;
-
-                do {
-                    for (View v : TreeIterables.breadthFirstViewTraversal(rootView)) {
-                        if (v.getId() == viewId) return;
-                    }
-                    uiController.loopMainThreadForAtLeast(50);
-                } while (System.currentTimeMillis() < end);
-
-                throw new AssertionError("Timed out waiting for view id: " + viewId);
-            }
-        });
-    }
 }
 
 

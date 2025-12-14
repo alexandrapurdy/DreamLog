@@ -7,11 +7,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 import android.view.View;
 
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
-
-import com.google.firebase.FirebaseApp;
 
 import org.hamcrest.Matcher;
 import org.junit.Before;
@@ -20,6 +17,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.dreamlog.controller.ControllerActivity;
+import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.initializeAndSignOut;
 
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
@@ -44,7 +42,7 @@ public class ViewLogSystemTest {
 
     @Before
     public void setUp() {
-        FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext());
+        initializeAndSignOut();
 
         waitForAnyView(UI_TIMEOUT_MS, R.id.authTitle, R.id.inputDreamButton);
 
