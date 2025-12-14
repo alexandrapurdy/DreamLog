@@ -9,18 +9,23 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
+import android.view.View;
+
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.dreamlog.controller.ControllerActivity;
-import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.ensureOnMenu;
 import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.initializeAndSignOut;
-import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.waitForView;
+
+import androidx.test.espresso.UiController;
+import androidx.test.espresso.ViewAction;
+import androidx.test.espresso.util.TreeIterables;
 
 /**
  * System tests for View DreamLog use cases:
@@ -40,7 +45,12 @@ public class ViewLogSystemTest {
     @Before
     public void setUp() {
         initializeAndSignOut();
-        ensureOnMenu();
+
+        waitForAnyView(UI_TIMEOUT_MS, R.id.authTitle, R.id.inputDreamButton);
+
+        signInIfNeeded();
+
+        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
     }
 
     /** view Log screen loads successfully */

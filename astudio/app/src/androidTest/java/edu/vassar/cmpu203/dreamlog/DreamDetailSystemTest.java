@@ -48,7 +48,15 @@ public class DreamDetailSystemTest {
     @Before
     public void setUp() {
         initializeAndSignOut();
-        ensureOnMenu();
+
+        // Wait until either auth or menu is visible
+        waitForAnyView(UI_TIMEOUT_MS, R.id.authTitle, R.id.inputDreamButton);
+
+        signInIfNeeded();
+
+        // Now we should be on menu
+        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
+
         ensureAtLeastOneDream();
     }
 
