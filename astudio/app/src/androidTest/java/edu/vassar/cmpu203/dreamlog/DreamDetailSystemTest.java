@@ -1,17 +1,9 @@
 package edu.vassar.cmpu203.dreamlog;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
-import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.action.ViewActions.scrollTo;
+import static androidx.test.espresso.action.ViewActions.*;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.ensureOnMenu;
-import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.waitForView;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
 
 import android.view.View;
 
@@ -85,7 +77,7 @@ public class DreamDetailSystemTest {
 
         onView(withId(R.id.backButton)).perform(scrollTo(), click());
 
-        waitForView(R.id.dreamsRecyclerView);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamsRecyclerView);
         onView(withId(R.id.dreamsRecyclerView)).check(matches(isDisplayed()));
         onView(withId(R.id.filterText)).check(matches(isDisplayed()));
     }
@@ -98,7 +90,7 @@ public class DreamDetailSystemTest {
         onView(withId(R.id.editButton)).perform(scrollTo(), click());
 
         // Edit screen has these buttons for sure (from your XML)
-        waitForView(R.id.saveButton);
+        waitForView(UI_TIMEOUT_MS, R.id.saveButton);
         onView(withId(R.id.saveButton)).check(matches(isDisplayed()));
         onView(withId(R.id.cancelButton)).check(matches(isDisplayed()));
 
@@ -118,7 +110,7 @@ public class DreamDetailSystemTest {
 
         onView(withText(R.string.delete)).perform(click());
 
-        waitForView(R.id.dreamsRecyclerView);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamsRecyclerView);
         onView(withId(R.id.dreamsRecyclerView)).check(matches(isDisplayed()));
 
         // snackbar
@@ -148,10 +140,10 @@ public class DreamDetailSystemTest {
     // ---------------- navigation helpers ----------------
 
     private void goToViewLog() {
-        waitForView(R.id.dreamLogButton);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
         onView(withId(R.id.dreamLogButton)).perform(click());
 
-        waitForView(R.id.dreamsRecyclerView);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamsRecyclerView);
         onView(withId(R.id.dreamsRecyclerView)).check(matches(isDisplayed()));
     }
 
@@ -161,20 +153,20 @@ public class DreamDetailSystemTest {
         // If empty, create one (belt + suspenders)
         if (isEmptyStateShowing()) {
             onView(withId(R.id.backButton)).perform(click());
-            waitForView(R.id.inputDreamButton);
+            waitForView(UI_TIMEOUT_MS, R.id.inputDreamButton);
             addDreamViaInputScreen("detail test", "summary", "theme", "char", "loc");
             // controller shows detail immediately; return to menu then to log
             onView(withId(R.id.backButton)).perform(scrollTo(), click()); // detail->log
-            waitForView(R.id.backButton);
+            waitForView(UI_TIMEOUT_MS, R.id.backButton);
             onView(withId(R.id.backButton)).perform(click()); // log->menu
-            waitForView(R.id.dreamLogButton);
+            waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
             goToViewLog();
         }
 
         onView(withId(R.id.dreamsRecyclerView))
                 .perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        waitForView(R.id.dreamTitle);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamTitle);
         onView(withId(R.id.dreamTitle)).check(matches(isDisplayed()));
     }
 
@@ -206,7 +198,7 @@ public class DreamDetailSystemTest {
 
         // Back to menu
         onView(withId(R.id.backButton)).perform(click());
-        waitForView(R.id.inputDreamButton);
+        waitForView(UI_TIMEOUT_MS, R.id.inputDreamButton);
 
         if (hasItem) return;
 
@@ -219,17 +211,17 @@ public class DreamDetailSystemTest {
         );
 
         // Controller shows detail after add. Go back to menu for stable starting state.
-        waitForView(R.id.backButton); // detail back
+        waitForView(UI_TIMEOUT_MS, R.id.backButton); // detail back
         onView(withId(R.id.backButton)).perform(scrollTo(), click()); // detail -> log
-        waitForView(R.id.backButton); // log back
+        waitForView(UI_TIMEOUT_MS, R.id.backButton); // log back
         onView(withId(R.id.backButton)).perform(click()); // log -> menu
-        waitForView(R.id.dreamLogButton);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
     }
 
     private void addDreamViaInputScreen(String title, String summary, String themes, String chars, String loc) {
         onView(withId(R.id.inputDreamButton)).perform(click());
 
-        waitForView(R.id.dreamTitleText);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamTitleText);
 
         onView(withId(R.id.dreamTitleText)).perform(scrollTo(), replaceText(title), closeSoftKeyboard());
         onView(withId(R.id.summaryText)).perform(scrollTo(), replaceText(summary), closeSoftKeyboard());
@@ -240,7 +232,7 @@ public class DreamDetailSystemTest {
         onView(withId(R.id.addButton)).perform(scrollTo(), click());
 
         // After add, controller navigates to DreamDetail
-        waitForView(R.id.dreamTitle);
+        waitForView(UI_TIMEOUT_MS, R.id.dreamTitle);
         onView(withId(R.id.dreamTitle)).check(matches(isDisplayed()));
     }
 
@@ -268,6 +260,73 @@ public class DreamDetailSystemTest {
     }
 
     // ---------------- wait helpers (same as your working test) ----------------
+
+    private void waitForView(long timeoutMs, int viewId) {
+        onView(isRoot()).perform(waitForViewAction(timeoutMs, viewId));
+    }
+
+    private void waitForAnyView(long timeoutMs, int... ids) {
+        onView(isRoot()).perform(waitForAnyViewAction(timeoutMs, ids));
+    }
+
+    private static ViewAction waitForViewAction(long timeoutMs, int viewId) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for view id " + viewId;
+            }
+
+            @Override
+            public void perform(UiController uiController, View rootView) {
+                long end = System.currentTimeMillis() + timeoutMs;
+
+                do {
+                    for (View v : TreeIterables.breadthFirstViewTraversal(rootView)) {
+                        if (v.getId() == viewId) return;
+                    }
+                    uiController.loopMainThreadForAtLeast(50);
+                } while (System.currentTimeMillis() < end);
+
+                throw new AssertionError("Timed out waiting for view id: " + viewId);
+            }
+        };
+    }
+
+    private static ViewAction waitForAnyViewAction(long timeoutMs, int... ids) {
+        return new ViewAction() {
+            @Override
+            public Matcher<View> getConstraints() {
+                return isRoot();
+            }
+
+            @Override
+            public String getDescription() {
+                return "wait for any of view ids";
+            }
+
+            @Override
+            public void perform(UiController uiController, View rootView) {
+                long end = System.currentTimeMillis() + timeoutMs;
+
+                do {
+                    for (View v : TreeIterables.breadthFirstViewTraversal(rootView)) {
+                        int vid = v.getId();
+                        for (int target : ids) {
+                            if (vid == target) return;
+                        }
+                    }
+                    uiController.loopMainThreadForAtLeast(50);
+                } while (System.currentTimeMillis() < end);
+
+                throw new AssertionError("Timed out waiting for any of the provided view ids.");
+            }
+        };
+    }
 
     private static ViewAction waitForDisplayed(long timeoutMs) {
         return new ViewAction() {
