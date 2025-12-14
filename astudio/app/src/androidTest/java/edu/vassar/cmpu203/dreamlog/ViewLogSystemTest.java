@@ -1,29 +1,26 @@
 package edu.vassar.cmpu203.dreamlog;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.*;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
+import static androidx.test.espresso.action.ViewActions.replaceText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-import android.view.View;
-
-import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
-import com.google.firebase.FirebaseApp;
-
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import edu.vassar.cmpu203.dreamlog.controller.ControllerActivity;
-
-import androidx.test.espresso.UiController;
-import androidx.test.espresso.ViewAction;
-import androidx.test.espresso.util.TreeIterables;
+import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.ensureOnMenu;
+import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.initializeAndSignOut;
+import static edu.vassar.cmpu203.dreamlog.SystemTestUtils.waitForView;
 
 /**
  * System tests for View DreamLog use cases:
@@ -36,21 +33,14 @@ import androidx.test.espresso.util.TreeIterables;
 @RunWith(AndroidJUnit4.class)
 public class ViewLogSystemTest {
 
-    private static final long UI_TIMEOUT_MS = 10_000;
-
     @Rule
     public ActivityScenarioRule<ControllerActivity> scenarioRule =
             new ActivityScenarioRule<>(ControllerActivity.class);
 
     @Before
     public void setUp() {
-        FirebaseApp.initializeApp(ApplicationProvider.getApplicationContext());
-
-        waitForAnyView(UI_TIMEOUT_MS, R.id.authTitle, R.id.inputDreamButton);
-
-        signInIfNeeded();
-
-        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
+        initializeAndSignOut();
+        ensureOnMenu();
     }
 
     /** view Log screen loads successfully */
@@ -101,7 +91,7 @@ public class ViewLogSystemTest {
         goToViewLog();
         onView(withId(R.id.backButton)).perform(click());
 
-        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
+        waitForView(R.id.dreamLogButton);
         onView(withId(R.id.userStatus)).check(matches(isDisplayed()));
         onView(withId(R.id.dreamLogButton)).check(matches(isDisplayed()));
         onView(withId(R.id.inputDreamButton)).check(matches(isDisplayed()));
@@ -109,34 +99,11 @@ public class ViewLogSystemTest {
 
     /** Menu -> ViewLog */
     private void goToViewLog() {
-        waitForView(UI_TIMEOUT_MS, R.id.dreamLogButton);
+        waitForView(R.id.dreamLogButton);
         onView(withId(R.id.dreamLogButton)).perform(click());
 
-        waitForView(UI_TIMEOUT_MS, R.id.dreamsRecyclerView);
+        waitForView(R.id.dreamsRecyclerView);
         onView(withId(R.id.dreamsRecyclerView)).check(matches(isDisplayed()));
-    }
-
-    /** if auth is showing, sign in with test  */
-    private void signInIfNeeded() {
-        try {
-            onView(withId(R.id.authTitle)).check(matches(isDisplayed()));
-
-            onView(withId(R.id.emailInput)).perform(
-                    click(),
-                    replaceText("test@example.com"),
-                    closeSoftKeyboard()
-            );
-
-            onView(withId(R.id.passwordInput)).perform(
-                    click(),
-                    replaceText("123456"),
-                    closeSoftKeyboard()
-            );
-
-            onView(withId(R.id.signInButton)).perform(click());
-
-        } catch (Throwable ignored) {
-        }
     }
 
     /**
@@ -148,72 +115,5 @@ public class ViewLogSystemTest {
         } catch (Throwable t) {
             onView(withId(R.id.emptyMessage)).check(matches(isDisplayed()));
         }
-    }
-
-    private void waitForView(long timeoutMs, int viewId) {
-        onView(isRoot()).perform(waitForViewAction(timeoutMs, viewId));
-    }
-
-    private void waitForAnyView(long timeoutMs, int... ids) {
-        onView(isRoot()).perform(waitForAnyViewAction(timeoutMs, ids));
-    }
-
-    private static ViewAction waitForViewAction(long timeoutMs, int viewId) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for view id " + viewId;
-            }
-
-            @Override
-            public void perform(UiController uiController, View rootView) {
-                long end = System.currentTimeMillis() + timeoutMs;
-
-                do {
-                    for (View v : TreeIterables.breadthFirstViewTraversal(rootView)) {
-                        if (v.getId() == viewId) return;
-                    }
-                    uiController.loopMainThreadForAtLeast(50);
-                } while (System.currentTimeMillis() < end);
-
-                throw new AssertionError("Timed out waiting for view id: " + viewId);
-            }
-        };
-    }
-
-    private static ViewAction waitForAnyViewAction(long timeoutMs, int... ids) {
-        return new ViewAction() {
-            @Override
-            public Matcher<View> getConstraints() {
-                return isRoot();
-            }
-
-            @Override
-            public String getDescription() {
-                return "wait for any of view ids";
-            }
-
-            @Override
-            public void perform(UiController uiController, View rootView) {
-                long end = System.currentTimeMillis() + timeoutMs;
-
-                do {
-                    for (View v : TreeIterables.breadthFirstViewTraversal(rootView)) {
-                        int vid = v.getId();
-                        for (int target : ids) {
-                            if (vid == target) return;
-                        }
-                    }
-                    uiController.loopMainThreadForAtLeast(50);
-                } while (System.currentTimeMillis() < end);
-
-                throw new AssertionError("Timed out waiting for any of the provided view ids.");
-            }
-        };
     }
 }
